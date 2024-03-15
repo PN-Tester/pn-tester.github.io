@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Bypassing BIOS password on HP laptops
+title: Bypassing BIOS password on modern HP laptops
 date: '2024-03-15 12:00:00 -0600'
 description: 'Journey to unlocking UEFI settings for physical pentest engagement'
 category:
@@ -17,7 +17,10 @@ image:
 
 There are many reasons to want to bypass a Administrator password that is restricting your ability to access BIOS settings on a computer. Some people may have acquired a second hand laptop and find themselves unable to customize certain settings. Those settings may include the ability to disable secureboot and change the boot order of a laptop in order to run an alternate OS from a USB for example. In my particular case, I was given an engagement that involved compromising a simulated "stolen laptop". I was given no windows credentials and the laptop had bitlocker configured to use the TPM. Full disk encryption in this case prevented me from manipulating the filesystem to gain access to the OS via traditional means, so my only remaining option was to attempt Direct memory access (DMA) based attacks. I had a screamer board I wanted to use so I opened up the laptop casing and took note of the motherboard. There was no PCIe port as expected, but luckily this was a modern laptop (HP Elitebook X360 G10 2-in-1) , so it had a wifi module connected to the motherboard via M.2 E slot. Sweet! I know from my research that M.2 E slots typically expose at least 1 PCI express lane, so I unscrewed that sucker and plopped in a M.2 E key to M.2 H key adapter. I then used another adapter, M.2 H to PCIe 1x in order to connect my screamer! After a bit of painfull experimentation and research which lead me to understand the M.2 does not supply the needed 12v power to the board as a traditional PCIe port would, I fixed everything by using an external PSU which exposed a 15 pin SATA power cable and connected that to my M.2 H board via a 4 pin adapter. Bingo. Everything is powered on, and I can reach the screamer from my attack laptop. I enthusiastically attempted to read memory from the target laptop and........nothing. Reapeatedly. The screamer was failing 100% of page read operations and getting kicked off the PCI bus every attempt, forcing me to reboot constantly. What gives? Well well, ill tell you what gives. Its not 2018 anymore folks! Turns out Microsoft, Apple, Intel, AMD and co take these hardware based attacks pretty darn seriously (with good reason) and have gotten well into implementing countermeasures against DMA attacks by default on modern computers. Since my target laptop was using Intel based processor, the countermeasures that concerned me where in fact known as "DMA Protection" and of course, "Intel VT-D" a.k.a "Virtualization Technology for Directed I/O". Damn, ok. Good for them, bad for me. How do I get around this? Turns out, these settings are configured in the BIOS and like I mentioned, are enabled by default. Now when I say BIOS, I really mean UEFI as has been the standard for some time now, but we all know what i mean so lets move on because the terminology remains relatively interchangle both in documentation and in the actual settings themselves to this day. So, I need to disable this in the BIOS. No problem. I reboot the computer, smash F10 at the preboot screen and.....
 ![BIOS PASSWORD](/assets/img/bios/1.png){: width="700" height="400" }
-Checkmate hacker ! Now this is a problem for me because I have no way to perform DMA without changing these BIOS settings. This is how my journey began. I had invested quite a bit of time into the DMA attack preparation at this point and was NOT going to take this lying down. No sir. This blog post will detail the steps I took to understanding and eventually overcoming this security feature. 
+
+> Checkmate hacker !
+
+Now this is a problem for me because I have no way to perform DMA without changing these BIOS settings. This is how my journey began. I had invested quite a bit of time into the DMA attack preparation at this point and was NOT going to take this lying down. No sir. This blog post will detail the steps I took to understanding and eventually overcoming this security feature. 
 
 ## BIOS RECON
 
@@ -108,7 +111,8 @@ Could this be the secret sauce to enable MPM ? Only one way to find out. I modif
 SALVATION! That sweet sweet red labelling got me tripping HARD at 3am. I smash F10 like I was entering hyperdrive, and was greeted with the following :
 ![chirpy](/assets/img/bios/23.png){: .shadow }
 Success. Sweet, sweet success. I had entered manufacturer programming mode, the mode that the computers are in at the factory. This is where all the basic information like serial number, device type, warranty date and such are programmed into the BIOS firmware. Via this mode, you can reset factory default settings from the Main Menu. Then, after a reboot, you can reset the security settings. Finally, you can set your OWN Administrator BIOS password, sending the previously unknown password to what I can only assume is the digital equivalent of the river styx. 
-![chirpy](/assets/img/bios/24.gif){: .shadow }
+
+![chirpy](/assets/img/bios/24.gif){: width="700" height="400" }
 
 Finally I was able to leverage access to the Bios Settings to disable VT-D and DMA protection, thus enabling my actual objective, performing a DMA attack.
 ![chirpy](/assets/img/bios/25.png){: .shadow }
