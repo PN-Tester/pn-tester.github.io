@@ -70,7 +70,7 @@ There is another way to protect yourself from weight of responsibility that come
 
 Unlike excuses, Accountability is not a shield, rather, it is your armour. 
 
-It will not prevent you using the sword.
+It will not prevent you from using the sword.
 
 Accountability is accepting the result of your choices. At its core, it is honesty, transparency, purity of spirit.
 
