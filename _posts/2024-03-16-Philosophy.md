@@ -8,8 +8,8 @@ category:
 tags: [philosophy, discipline]
 mermaid: true
 image:
-  path : ""
-  src : ""
+  path : "/assets/img/philosophy/philosophy.png"
+  src : "/assets/img/philosophy/philosophy.png"
 ---
 
 # My philosophy - The Sword, The Shield, The Armour
