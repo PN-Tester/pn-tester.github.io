@@ -25,7 +25,7 @@ Now this is a problem for me because I have no way to perform DMA without alteri
 
 ## BIOS RECON
 
-So first of all, I needed to refresh myself on how exactly BIOS works on modern laptops. I know it's used for preboot and to initialize the OS, I know about the POST process and all that stuff from my introductory computer science classes but I have no real physical conception of how this is implemented on a modern motherboard. This lead me to my first discover.
+So first of all, I needed to refresh myself on how exactly BIOS works on modern laptops. I know it's used for preboot and to initialize the OS, I know about the POST process and all that stuff from my introductory computer science classes but I have no real physical conception of how this is implemented on a modern motherboard. So I open up my trusty search engine and start learning.
 
 BIOS tends to written to a dedicated chip which is soldered to the motherboard. This chip is a type of EEPROM, or Electronically Erasable Programmable Read-Only Memory. These chips come in different flavours, sizes, models, and even manufacturers can differ between different versions of the same computer from the same company. They typically look like this :
 ![chirpy](/assets/img/bios/2.PNG){: .shadow }
