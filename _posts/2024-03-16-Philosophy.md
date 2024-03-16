@@ -46,13 +46,13 @@ In this worldview, there is nobody, nothing else to blame, except your own lack 
 
 Many people refuse to pick up the sword of discipline because this burden of responsibility is too great, and the implications it leads too are too damaging to their ego.
 
-If I can be 250lb of pure muscle with just discipline, why aren't I? If I can become an expert software engineer, or write a book, or learn to play piano, why don't I? 
+If I can be extremely fit and in shape with just discipline, why aren't I? If I can become an expert software engineer, or write a book, or learn to play piano, why don't I? 
 
 ## Excuses
 
 Most will refuse to believe these things are possible. They will hide their ego behind the shield of excuses. 
 
-Excuses protect us from the realization that we are to blame for our own failings. They protect us against the cognitive dissonance that arises when we acknowledge we arent what we want to be, where we want to be, who we want to be.
+Excuses protect us from the realization that we are to blame for our own failings. They protect us against the cognitive dissonance that arises when we acknowledge we aren't what we want to be, where we want to be, who we want to be.
 
 The shield is effective. This is why many indulge in its use. 
 
@@ -60,7 +60,7 @@ But you cannot use the sword while cowering behind the shield.
 
 And you cannot defeat your problems without the sword. The shield alone will keep you exactly where you are.
 
-The shield is enemy of progress. 
+The shield is the enemy of progress. 
 
 You must step out from behind the protection of excuses, grasp the sword with both hands, and attack. 
 
@@ -78,7 +78,7 @@ It is the opposite of excuses, but it provides the same benefit.
 
 Accountability will protect your ego from the crushing weight of discipline. 
 
-You are not 250lb of pure muscle because you have not chosen to put the effort to be that, yet. 
+You are not extremely fit or in shape because you have not chosen to put the effort to be that, yet. 
 
 You are not the software engineer, because you havent chosen to be that, yet.
 
@@ -100,5 +100,5 @@ Accountability says, thats ok, I chose to not try as hard as possible and thus, 
 
 In my opinion, the combination of Discipline and Accountability are the key to healthy self-actualization and growth. They are core components of being a self determining, efficient, successful person.
 
-Drop the shield, don the armour, and pull the sword from the stone my friend.
+> Drop the shield, don the armour, and pull the sword from the stone my friend.
 
