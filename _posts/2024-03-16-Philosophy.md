@@ -16,7 +16,19 @@ image:
 
 In my philosophy, discipline is the most important factor in achieving any kind of objective.
 
-Discipline is the difference between passing and failing, succeeding and excelling, merely existing and living free.
+Discipline is the difference between passing and failing, succeeding and excelling, merely existing and living free. 
+
+Indeed, discipline is a core component of the hacker ethos. It is one thing to have an idea. "How does this work?" , you might ask. "I wonder if X has any impact on Y?". "I wonder if anybody has ever tried this before?". "I wonder if I really understand this?".
+
+Everyone has ideas. Everyone asks questions about the nature of things. The difference between merely wondering from the comfort of your couch, and learning, innovating, discovering new phenomena and interactions, is discipline.
+
+It takes discipline to move from the realm of thoughts, to the realm of practice. To move from your couch or your bed or your leisure, to your computer. To then learn how to setup an environment where you can test your hypothesis, or confirm your theory. To ignore the part of you that says "surely this isn't worth it, let's give up". To push onwards and create the experiment. To seek knowledge. To be a scientist. 
+
+And most importantly it takes discipline to fail. To realize you were wrong, or you didn't understand to begin with, or you still do not understand. And then to try again. And again, and again, and keep trying, hundreds of times, thousands of times, until you do.
+
+It takes discipline to put away your pride, roll up your sleeves, and dive headfirst into complex materials with the objective of understanding how things work. 
+
+Discipline is the central pillar that all real hackers have in common.
 
 It provides cold, relentless power to overcome obstacles and solve problems of any kind.
 
