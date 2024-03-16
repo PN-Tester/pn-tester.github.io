@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Philosphy : Discipline, Excuses, and Accountability
+title: Philosphy
 date: '2024-03-16 12:00:00 -0600'
 description: 'A brief note on my philosophy in life'
 category:
