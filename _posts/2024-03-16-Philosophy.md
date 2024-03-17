@@ -18,13 +18,13 @@ In my philosophy, discipline is the most important factor in achieving any kind 
 
 Discipline is the difference between passing and failing, succeeding and excelling, merely existing and living free. 
 
-Indeed, discipline is a core component of the hacker ethos. It is one thing to have an idea. "How does this work?" , you might ask. "I wonder if X has any impact on Y?". "I wonder if anybody has ever tried this before?". "I wonder if I really understand this?".
+Indeed, discipline is a core component of the hacker ethos. The relentless, obsessive pursuit of knowledge and understanding that characterizes this lifestyle is only possible with incredible determination and self-control. It is easy, comfortable, comforting even, to accept that we understand something. People underestimate how difficult it can be to challenge our understanding of things. To test our knowledge rigourously, to bend it and see exactly where it snaps, where our conceptualization of topics we believe we are experts in breaks down. The ego naturally rejects this. It wants to believe it understands. The ego seeks to neatly package the complexities that hackers exists to unravel. The process of challenging yourself and your understanding of the world is immensely rewarding, but also incredibly difficult. This is where discipline comes into play. It is one thing to have an idea. "How does this work?" , you might ask. "I wonder if X has any impact on Y?". "I wonder if anybody has ever tried this before?". "I wonder if I really understand this?".
 
 Everyone has ideas. Everyone asks questions about the nature of things. The difference between merely wondering from the comfort of your couch, and learning, innovating, discovering new phenomena and interactions, is discipline.
 
 It takes discipline to move from the realm of thoughts, to the realm of practice. To move from your couch or your bed or your leisure, to your computer. To then learn how to setup an environment where you can test your hypothesis, or confirm your theory. To ignore the part of you that says "surely this isn't worth it, let's give up". To push onwards and create the experiment. To seek knowledge. To be a scientist. 
 
-And most importantly it takes discipline to fail. To realize you were wrong, or you didn't understand to begin with, or you still do not understand. And then to try again. And again, and again, and keep trying, hundreds of times, thousands of times, until you do.
+And most importantly it takes discipline to fail. To realize you were wrong, or you didn't understand to begin with, or you still do not understand. And then to try again. And Again. And again, and again, and keep trying, hundreds of times, thousands of times, until you do. 
 
 It takes discipline to put away your pride, roll up your sleeves, and dive headfirst into complex materials with the objective of understanding how things work. 
 
@@ -36,7 +36,7 @@ It provides cold, relentless power to overcome obstacles and solve problems of a
 
 Discipline is the sword, and with this sword you can fell any problem, any issue, and achieve greatness.
 
-Like Excalibur, wielding this weapon will make you king of your own existence.
+Like the mythical sword in the stone Excalibur, wielding this weapon will make you king of your own existence.
 
 But heavy lies the crown, make no mistake.
 
@@ -80,23 +80,25 @@ Accountability will protect your ego from the crushing weight of discipline.
 
 You are not extremely fit or in shape because you have not chosen to put the effort to be that, yet. 
 
-You are not the software engineer, because you havent chosen to be that, yet.
+You are not the software engineer, because you havent chosen  to pursue that, yet.
 
 You haven't written the book, or learnt the piano, because you have never truly tried. Not yet. 
 
 And maybe you never will. That's fine. This is the key.
 
-As long as you are accountable to yourself that the decision is YOURS. There are no external factors preventing you from picking up the weights at the gym. Or learning piano, or writing the book.
+As long as you are accountable to yourself that the decision is _yours_. There are no external factors preventing you from picking up the weights at the gym. Or learning piano, or writing the book.
 
-Lack of time? Sleep less. Lack of energy? Make better habits. Eat better, go out less, play less video games, watch less TV. The spiderweb of decisions all fall back on your decisions in the end of the day.
+Lack of time? Sleep less. Lack of energy? Make better habits. Eat better, go out less, play less video games, watch less TV. The cascading waterfall of consequences all fall back on your decisions in the end of the day.
 
-Accepting this is tough, its heavy, but most importantly, it is EMPOWERING. YOU ARE IN CONTROL!
+Accepting this is tough, its heavy, but most importantly, it is _empowering_. YOU ARE IN CONTROL!
 
 And if you are OK with these decisions, then accountability will protect you. It will make you understand that you are living an experience that is the sum your choices.
 
-It will enable you to acknowledge the power that discipline can bring you, without contradicting your belief that you can achieve anything you want.
+It will enable you to acknowledge the power that discipline can bring you, without contradicting belief in your own worth.
 
-Accountability says, thats ok, I chose to not try as hard as possible and thus, I accept the outcome. But I know deep down that with discipline, I could have done better.
+In the face of failure accountability says, _that's ok_, I chose to not try as hard as possible and thus, I accept the outcome. But I know deep down that with discipline, I could have done better.
+
+Accountability will allow you to internalize defeat and failure in a healthy way. It allows for humility while maintaining hope that you can do better if you try harder. And you can always try harder. The question is, do you want to? This becomes a personal choice. Sometimes the answer is, and that's perfectly fine. 
 
 In my opinion, the combination of Discipline and Accountability are the key to healthy self-actualization and growth. They are core components of being a self determining, efficient, successful person.
 
