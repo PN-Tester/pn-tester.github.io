@@ -156,18 +156,16 @@ I have not seen any other tools that do this and I especially havent seen any do
 
 ## Direct Memory Access attack
 Now that the appropriate countermeasures had been disabled, I was able to use the screamer board mentioned earlier to access memory on the target. DMA attacks leveraging PCI express are very cool. Essentially, PCI express is a sort of "network" with its own protocols used inside the computer. The purpose is to allow peripheral devices (and their corresponding kernel drivers) direct access the memory without passing through the CPU. This allows for very high-speed operations which is crucial for certain high-performance hardware, like graphics cards, sound cards, gigabit speed ethernet, etc. Abusing this technology involves connecting to the PCI express network with a malicious device known as a screamer. There are many variations of this equipment available, and you can even make your own. I use the popular PCI Squirrel from LamdaConcepts.
-
 ![screamer](/assets/img/bios/26.jpg)
 
 Normally, there are countermeasures to prevent exploitation. Specifically, a structure, known as an Input-Ouput Memory Management Unit or IOMMU, is employed to create a mapping between physical and virtual memory addresses. With this, a peripheral device requesting access to a physical memory address will need to pass through an access control feature in order to learn the translated memory mapping. This is what we have disabled in the BIOS settings.
-
 ![IOMMU](/assets/img/bios/27.svg)
 
 In the absense of countermeasures, peripheral devices can go directly to memory. This process is straightforward. The screamer device advertises itself as a "bus master" and acquires the ability to send arbitrary requests to what is known as the "root complex" which is essentially the handler for Transmission Layer Packets or TLPs that we send via our device. Under normal circumstances, a device will only request access to read/write to its own memory, but this is crucially NOT a strict requirement. We can abuse this position to read/write to **kernel memory**, and do all sorts of fun things from there. Indeed, this type of attack has been used for a variety of purposes extending beyond offensive security over the years. Namely, the cheating community has picked up on this technique due to the ability to bypass software based anti-cheat programs. Additionally, it can be used to bypass antivirus, patch dll's in memory, perform forensics, and more. In our case, we will use it to bypass the windows login screen to which we have no credentials to gain access to the locked PC. You can read more about PCIe exploitation at the excellent blogpost here [https://astralvx.com/dma-explained](https://astralvx.com/dma-explained/).
 
 The setup we use to connect the PCIe 1x screamer board to the laptop is rather hacky, as mentioned in the intro. We use a series of adapters, powered by an external PSU. As a final cherry on the cake of hackyness, we need to short pins 4 and 5 (green to black) on the main PSU board cable in order to trick it into turning on and providing 12v power to the 15 pin SATA cable we have connected to the screamer. This is accomplished via the elegance of a paperclip.
-
 ![paperclip](/assets/img/bios/28.jpg)
+The setup radiates 1337 energies..........
 
 With everything in place, we have one last hurdle before we can read memory from the device. It appears that performing the exploitation once we are at the logon screen doesn't work in my case. The commands reach the screamer but always fail, and result in the device getting kicked off the PCI express network, forcing me to reboot and try again.
 ![fail](/assets/img/bios/29.jpg)
