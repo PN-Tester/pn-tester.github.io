@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Bypassing BIOS password for DMA attacks on modern HP computers
+title: Bypassing BIOS password for DMA attacks on HP computers
 date: '2024-03-15 12:00:00 -0600'
 description: 'Journey to unlocking UEFI settings for physical pentest engagement'
 category:
