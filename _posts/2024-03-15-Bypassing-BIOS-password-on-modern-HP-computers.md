@@ -172,9 +172,9 @@ With everything in place, we have one last hurdle before we can read memory from
 Interestingly, there appears to be a race condition where if a command is sent at the very start of the windows boot sequence, our exploitation succeeds and we can maintain persistant capability to send TLPs. At the time of writing, I believe this is because of some Operating System level countermeasures to DMA, which has not had the chance to intialize at the very early moments of the OS booting up. This condition only occurs when a reboot is performed from windows recovery screen (as opposed to a hard reboot). I discovered that if we succeed in injecting a kernel module at this stage, we can still reach it later given that we know its address! With this knowledge, we can finally perform the exploit. We cause the computer to enter windows recover, then select the reboot option. We immediately power on the screamer, and when the HP logo screen disapears, we quickly send the TLP that requests writing the kernel Module to memory.
 ![RaceCondition](/assets/img/bios/30.jpg)
 We then receive the response TLP which confirms that our implant is written at memory address 0x53c87000. At this point, we are ready to perform exploitation. We send shellcode to that memory address and obtain a beautiful shell as SYSTEM on the target laptop. From this point, the laptop is fully pwned. We use our SYSTEM shell to create a new user account "hacker" and place it in the local Administrators group. 
-![pwned](/assets/img/bios/31.jpg){: .shadow }
+![pwned](/assets/img/bios/31.jpg)
 Now, we can simply login to the laptop with our account, and enjoy full access to Windows !
-PIC
+![pwned](/assets/img/bios/32.jpg)
 That's it ! For more information on the fantastic PCILeech program created by ufrisk I recommend everyone take a look at the official github repo and his various talks and papers on this fascinating subject : [https://github.com/ufrisk/pcileech/](https://github.com/ufrisk/pcileech/). 
 
 ## Conclusion
