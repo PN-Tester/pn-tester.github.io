@@ -216,7 +216,7 @@ DMAReaper.py execution against Windows 11 24H2 is shown below. The program takes
 9) Identify the DMAR ACPI Table
 10) Overwrite the DMAR ACPI Table with 64 zeroes
 
-![DMAReaper.py](https://github.com/PN-Tester/pn-tester.github.io/blob/main/assets/img/DMAReaper/DMAReaper.PNG)
+![DMAReaper.py](https://github.com/PN-Tester/pn-tester.github.io/blob/main/assets/img/DMAReaper/DMAReaper.jpg)
 
 What happens if we boot now? 
 
