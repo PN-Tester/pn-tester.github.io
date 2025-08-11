@@ -8,22 +8,24 @@ category:
 tags: [DMA, Pentest, Physical, Hardware]
 mermaid: true
 image:
-  path : "/assets/img/DMAReaper/demo.jpg"
-  src : "/assets/img/DMAReaper/demo.jpg"
+  path : "/assets/img/DMAReaper/LOGO.png"
+  src : "/assets/img/DMAReaper/LOGO.png"
 ---
 
-This post is about pre-boot DMA attacks against modern windows targets during physical pentest scenarios using the [PCILeech firmware](https://github.com/ufrisk/pcileech-fpga/) and a suitable FPGA board.
+_This post is about pre-boot DMA attacks against modern windows targets during physical pentest scenarios using the [PCILeech firmware](https://github.com/ufrisk/pcileech-fpga/) and a suitable FPGA board._
+
+During a physical pentest against a simulated stolen laptop, one of the main objectives is finding a way to modify UEFI configuration such that we can enable a Direct Memmory Access (DMA) attack. In modern times, attackers will commonly face hardened laptops which have a multitude of firmware countermeasures enabled by default. Additionally, most modern laptops implement hardware encryption in the form of BitLocker, and use a TPM to track changes to the pre-boot configuration. This makes modification of certain UEFI settings without triggering BitLocker recovery a non-trivial challenge. There are some existing solutions to these issues. 
 
 The [FirstStrike](https://github.com/PN-Tester/FirstStrike) approach is to leave "DMA Protection" and "Intel VT-d" features enabled in BIOS, opting only to disabled "Intel VT-x" or "Virtualization Technology" when this settings can be controlled without triggering BitLocker Recovery.
 
-The attack then injects a modified [PCILeech](https://github.com/ufrisk/pcileech) kernel module during pre-boot which detonates automatically from within ntoskernel.exe once the OS is loaded. This approach works despite OS level Kernel DMA protection being enabled, but there are several limitations.
+The attack then injects a modified [PCILeech](https://github.com/ufrisk/pcileech) kernel module during pre-boot which detonates automatically from within ntoskernel.exe once the OS is loaded. This technique works despite OS level Kernel DMA protection being enabled, but there are several limitations.
 
 ### Caveats
-In some recent UEFI implementation, Intel VT-x cannot be disabled while VT-d is enabled (the option is greyed out). Additionally, sometimes VT-x cannot be disabled without turning off Virtualization based BIOS Security, which will sometimes trigger BitLocker recovery. Finally, during a real physical pentest, you may encounter a target protected by a BIOS password on hardware for which no known BIOS password bypass technique exists.
+In some recent UEFI implementation, Intel VT-x cannot be disabled while VT-d is enabled (the option is greyed out). Additionally, sometimes VT-x cannot be disabled without turning off Virtualization based BIOS Security, which itself can trigger BitLocker recovery. Finally, during a real physical pentest, you may encounter a target protected by a BIOS password on hardware for which no known BIOS password bypass technique exists.
 
-Furthermore, the FirstStrike shellcode only works at this time against windows 10 targets. There is no public solution against Windows 11, and windows 10 is soon to be retired.
+Furthermore, the FirstStrike shellcode only works at against targets running windows 10. There is no public solution against Windows 11, and windows 10 is soon to be retired.
 
-We need an alternative method to disable Kernel DMA protection for these circumstances.
+We need an alternative method to disable Kernel DMA protection for these circumstances!
 
 ### Initial Setup
 Before we continue, lets check our windows target and make sure that Kernel DMA Protection is indeed enabled.
