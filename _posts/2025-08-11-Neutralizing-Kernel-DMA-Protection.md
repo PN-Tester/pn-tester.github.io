@@ -8,8 +8,8 @@ category:
 tags: [DMA, Pentest, Physical, Hardware]
 mermaid: true
 image:
-  path : "assets/img/DMAReaper/DMAReaper.jpg)"
-  src : "/assets/img/DMAReaper/DMAReaper.jpg)"
+  path : "assets/img/DMAReaper/DMAReaper.jpg"
+  src : "/assets/img/DMAReaper/DMAReaper.jpg"
 ---
 
 This post is about pre-boot DMA attacks against modern windows targets during physical pentest scenarios.
