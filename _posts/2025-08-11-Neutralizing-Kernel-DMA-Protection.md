@@ -103,7 +103,7 @@ And now we can navigate to /EFI/Microsoft/Boot where we placed our Shellx64.efi 
 
 ![Selecting Shellx64](https://github.com/PN-Tester/pn-tester.github.io/blob/ffe7e1fddd49b8b1573bf3b2e1029cacb59dbbff/assets/img/DMAReaper/11.PNG)
 
-Running this, we get our UEFI Shell. This is great because it runs as a program within the current UEFI environment, meaning data structures in memory are representative of the normal pre-boot environment. We can use the built-in (acpiview)[https://chriswayg.gitbook.io/opencore-visual-beginners-guide/advanced-topics/opencore-uefi-shell/acpiview] command to read the DMAR table and get its physical address for our R&D :
+Running this, we get our UEFI Shell. This is great because it runs as a program within the current UEFI environment, meaning data structures in memory are representative of the normal pre-boot environment. We can use the built-in [acpiview](https://chriswayg.gitbook.io/opencore-visual-beginners-guide/advanced-topics/opencore-uefi-shell/acpiview) command to read the DMAR table and get its physical address for our R&D :
 
 ![UEFIShell - acpiview](https://github.com/PN-Tester/pn-tester.github.io/blob/ffe7e1fddd49b8b1573bf3b2e1029cacb59dbbff/assets/img/DMAReaper/12.PNG)
 
