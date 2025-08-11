@@ -169,7 +169,7 @@ From the documentation, ["Industry Standard GUIDs"](https://uefi.org/specs/UEFI/
 We want to find ACPI tables, so we are interested in the **EFI_ACPI_20_TABLE_GUID** value!
 
 The doc shows the value as 
-  `{0x8868e871,0xe4f1,0x11d3,`\
+  `{0x8868e871,0xe4f1,0x11d3, \`
     `{0xbc,0x22,0x00,0x80,0xc7,0x3c,0x88,0x81}}`
 
 Confusingly, the structure uses a mix of Little and Big Endian for its different parts. If we want to pattern match, we need to normalize the different endianness of this string.
