@@ -30,19 +30,19 @@ Before we continue, lets check our windows target and make sure that Kernel DMA 
 
 The [documentation from microsoft](https://learn.microsoft.com/en-us/windows/security/hardware-security/kernel-dma-protection-for-thunderbolt#check-if-kernel-dma-protection-is-enabled) states that we can check this in two places , MSINFO and "Device Security".
 
-![https://learn.microsoft.com/en-us/windows/security/hardware-security/kernel-dma-protection-for-thunderbolt](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/1.PNG)
+![https://learn.microsoft.com/en-us/windows/security/hardware-security/kernel-dma-protection-for-thunderbolt](assets/img/DMAReaper/1.PNG)
 
 Ok, lets confirm those elements on our target laptop. Note we use Windows 10 here for convenience but everything is replicated on windows 11 later in the post :
 
 ### Device Security
 
-![Verifying Device Security](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/2.PNG)
+![Verifying Device Security](assets/img/DMAReaper/2.PNG)
 
 Looks good
 
 ### MSINFO32
 
-![Verifying MSINFO](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/3.PNG)
+![Verifying MSINFO](assets/img/DMAReaper/3.PNG)
 
 Alright so Kernel DMA Protection is enabled at the OS Level. Perfect ! Let's get to work.
 
@@ -51,7 +51,7 @@ Kernel DMA Protection has several *requirements* in order to function properly. 
 
 From [Microsoft Documentation on Kernel DMA Protection](https://learn.microsoft.com/en-us/windows/security/hardware-security/kernel-dma-protection-for-thunderbolt) :
 
-![How Kernel DMA Protection Works](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/4.PNG)
+![How Kernel DMA Protection Works](assets/img/DMAReaper/4.PNG)
 
 IOMMU is used. This makes sense, since we know IOMMU contains maps of physical to virtual memory each peripheral device is allowed to access.
 
@@ -59,13 +59,13 @@ So an obvious requirements seem to be VT-x and VT-d enabled in firmware.
 
 This is evident from Microsoft documented instruction for enabling Kernel DMA Protection seen below : 
 
-![Kernel DMA Protection requirements](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/5.PNG)
+![Kernel DMA Protection requirements](assets/img/DMAReaper/5.PNG)
 
 Alright, we already have a method of attacking the OS when we can disable VT-x ([FirstStrike](https://github.com/PN-Tester/FirstStrike)), so lets focus on VT-d. As stated in the caveats section, some UEFI implementation limit our ability to turn of VT-x without first disabling VT-d, and turning off VT-d triggers BitLocker recovery. That wont work. We need to *leave the features on* and still manage to disable DMA protection. T
 
 Let's explore how VT-d works from the [Intel Virtualization Technology for Directed I/O documentation](https://www.intel.com/content/www/us/en/content-details/774206/intel-virtualization-technology-for-directed-i-o-architecture-specification.html) :
 
-![Intel VT-d Documentation](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/6.PNG)
+![Intel VT-d Documentation](assets/img/DMAReaper/6.PNG)
 
 So, the **IOMMU** is useabled seemingly because VT-d reports the remapping data to the OS through this DMA Remapping Reporting (DMAR) ACPI table structure.
 
@@ -85,27 +85,27 @@ In UEFI, virtual and physical memory are mapped 1:1, so the best approach to ide
 
 We can place a custom EFI program called [UEFIShell](https://github.com/pbatard/UEFI-Shell) into the boot partition of the windows system as shown below :
 
-![Deploying UEFIShell](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/7.PNG)
+![Deploying UEFIShell](assets/img/DMAReaper/7.PNG)
 
 Once this EFI program is in place, we can reboot and boot into the shell from UEFI menu. First we open the Boot Menu (F9)
 
-![Selecting Boot Menu](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/8.PNG)
+![Selecting Boot Menu](assets/img/DMAReaper/8.PNG)
 
 We select boot from file
 
-![Selecting Boot From File](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/9.PNG)
+![Selecting Boot From File](assets/img/DMAReaper/9.PNG)
 
 Select the right volume
 
-![Selecting Volume](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/10.PNG)
+![Selecting Volume](assets/img/DMAReaper/10.PNG)
 
 And now we can navigate to /EFI/Microsoft/Boot where we placed our Shellx64.efi program earlier
 
-![Selecting Shellx64](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/11.PNG)
+![Selecting Shellx64](assets/img/DMAReaper/11.PNG)
 
 Running this, we get our UEFI Shell. This is great because it runs as a program within the current UEFI environment, meaning data structures in memory are representative of the normal pre-boot environment. We can use the built-in [acpiview](https://chriswayg.gitbook.io/opencore-visual-beginners-guide/advanced-topics/opencore-uefi-shell/acpiview) command to read the DMAR table and get its physical address for our R&D :
 
-![UEFIShell - acpiview](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/12.PNG)
+![UEFIShell - acpiview](assets/img/DMAReaper/12.PNG)
 
 Sweet, now we know what we are looking for, the DMAR ACPI is located at **0x57B64000**
 
@@ -117,7 +117,7 @@ As stated, we can't use acpiview from a DMA perspective, and booting UEFIShell o
 
 The [PCILeech Framework](https://github.com/ufrisk/pcileech) includes a [python API](https://github.com/ufrisk/LeechCore/wiki/LeechCore_API_Python) which acts as a wrapper around important basic functionality used to control the PCILeech firmware. This awesome tool is called [LeechCore](https://github.com/ufrisk/LeechCore). We will leverage this to gain arbitrary READ/WRITE from our own python program so that we can implement custom logic without the overhead of modifying the C language components of the PCILeech client or modules. 
 
-![LeechCore](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/13.PNG)
+![LeechCore](assets/img/DMAReaper/13.PNG)
 
 We implement this library into a basic python program which will initialize the connection to our screamer board, and use the read(), read_scatter(), and write() functions to control the FPGA during pre-boot and obtain and modify important memory structures.
 
@@ -129,7 +129,7 @@ Crucially, we can locate the EFI System Table by reading memory during pre-boot 
 
 The search for the table and resultant structure is seen here :
 
-![Search for EFI Base](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/14.PNG)
+![Search for EFI Base](assets/img/DMAReaper/14.PNG)
 
 Now that we can reliably find the EFI System Table, we can get to its content!
 
@@ -137,7 +137,7 @@ Now that we can reliably find the EFI System Table, we can get to its content!
 
 The UEFI 2.1 Standard describes the [Configuration Table](https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html#efi-configuration-table-properties-table) below :
 
-![UEFI Configuration Table documentation](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/15.PNG)
+![UEFI Configuration Table documentation](assets/img/DMAReaper/15.PNG)
 
 The Table will contain GUID/Pointer pairs that we are interested in.
 Crucially, the offsets of this structure from the EFI System Table Base address is **always the same**
@@ -148,13 +148,13 @@ at `0x70` from the EFI Table base address, we will have a pointer to the Configu
 
 We see that in our dump of the System table below, at exactly offset `0x70` as expected
 
-![Configuration Table Pointer](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/16.PNG)
+![Configuration Table Pointer](assets/img/DMAReaper/16.PNG)
 
 The Configuration Table Pointer in little Endian is **0x521B8000**
 
 We can walk this table in python easily. The raw memory looks like this :
 
-![Configuration table data](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/17.PNG)
+![Configuration table data](assets/img/DMAReaper/17.PNG)
 
 Again, according to the UEFI 2.1 Specs, this section contains GUID/Pointer pairs. The GUIDs are 16 Bytes long and the Pointers are 8 Bytes long making each entry 24 Bytes total. We can walk these programmatically in 24 byte chunks to parse them.
 
@@ -162,7 +162,7 @@ Once we find the right GUID, we will use its accompanying pointer to get to that
 
 From the documentation, ["Industry Standard GUIDs"](https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html#industry-standard-configuration-tables) are described
 
-![UEFI Industry Standard GUIDs](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/18.PNG)
+![UEFI Industry Standard GUIDs](assets/img/DMAReaper/18.PNG)
 
 We want to find ACPI tables, so we are interested in the **EFI_ACPI_20_TABLE_GUID** value!
 
@@ -178,7 +178,7 @@ EFI_ACPI_20_TABLE_GUID = **71 E8 68 88 F1 E4 D3 11 BC 22 00 80 C7 3C 88 81**
 
 We locate the accompanying pointer in the Configuration table dump as shown below :
 
-![Vendor Table Pointer](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/19.PNG)
+![Vendor Table Pointer](assets/img/DMAReaper/19.PNG)
 
 #### ACPI 2.0 VendorTable
 
@@ -186,7 +186,7 @@ Now that we have the pointer to the ACPI VendorTable (**0x57BFE014**) we can rea
 
 We find the pointer precisely at the previously obtained address, reading 4 bytes backwards.
 
-![RDSP](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/20.PNG)
+![RDSP](assets/img/DMAReaper/20.PNG)
 
 #### Root System Description Table
 
@@ -194,11 +194,11 @@ With the RSDP known, we can find the RSDT. This table contains pointers to all t
 
 Among the entries is the same address we obtained earlier using the acpiview program (the address is relatively static across reboots).
 
-![RDST](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/21.PNG)
+![RDST](assets/img/DMAReaper/21.PNG)
 
 We can confirm by parsing the memory at **0x57B64000** manually. We see the content of the DMAR ACPI table :
 
-![DMAR ACPI](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/22.PNG)
+![DMAR ACPI](assets/img/DMAReaper/22.PNG)
 
 This is the physical address of our target !
 
@@ -233,11 +233,11 @@ We can verify this again by checking "Device Security"
 
 ##### Windows 10 - Device Security
 
-![Win 10 Device Security](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/23.PNG)
+![Win 10 Device Security](assets/img/DMAReaper/23.PNG)
 
 ##### Windows 11 - Device Security
 
-![Win 11 Device Security](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/24.PNG)
+![Win 11 Device Security](assets/img/DMAReaper/24.PNG)
 
 **Memory Access Protection** is now *missing* from the Core Isolation features!!
 
@@ -245,11 +245,11 @@ Lets check MSINFO32 as before :
 
 ##### Windows 10 - MSINFO32
 
-![Win 10 - MSINFO](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/25.PNG)
+![Win 10 - MSINFO](assets/img/DMAReaper/25.PNG)
 
 ##### Windows 11 - MSINFO32
 
-![Win 11 - MSINFO](https://github.com/PN-Tester/pn-tester.github.io/blob/e154194c80fdc618423613daec9919e673ffa7a2/assets/img/DMAReaper/26.PNG)
+![Win 11 - MSINFO](assets/img/DMAReaper/26.PNG)
 
 System information is reporting that **Kernel DMA Protection is OFF**
 
