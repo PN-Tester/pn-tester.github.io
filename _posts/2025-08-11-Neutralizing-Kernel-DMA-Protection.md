@@ -8,8 +8,8 @@ category:
 tags: [DMA, Pentest, Physical, Hardware]
 mermaid: true
 image:
-  path : "https://github.com/PN-Tester/pn-tester.github.io/blob/0210e519c53fb470b7236594128e7da4a5c5ce83/assets/img/DMAReaper/DMAReaper.jpg"
-  src : "https://github.com/PN-Tester/pn-tester.github.io/blob/0210e519c53fb470b7236594128e7da4a5c5ce83/assets/img/DMAReaper/DMAReaper.jpg"
+  path : "./assets/img/DMAReaper/DMAReaper.jpg"
+  src : "./assets/img/DMAReaper/DMAReaper.jpg"
 ---
 
 This post is about pre-boot DMA attacks against modern windows targets during physical pentest scenarios using the [PCILeech firmware](https://github.com/ufrisk/pcileech-fpga/) and a suitable FPGA board.
