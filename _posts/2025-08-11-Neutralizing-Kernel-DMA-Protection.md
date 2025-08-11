@@ -158,7 +158,7 @@ We can walk this table in python easily. The raw memory looks like this :
 
 ![Configuration table data](/assets/img/DMAReaper/17.PNG)
 
-Again, according to the UEFI 2.1 Specs, this section contains GUID/Pointer pairs. The GUIDs are 16 ytes long and the Pointers are 8 bytes long making each entry 24 bytes total. We can walk these programmatically in 24 byte chunks to parse them.
+Again, according to the UEFI 2.1 Specs, this section contains GUID/Pointer pairs. The GUIDs are 16 bytes long and the Pointers are 8 bytes long making each entry 24 bytes total. We can walk these programmatically in 24 byte chunks to parse them.
 
 Once we find the right GUID, we will use its accompanying pointer to get to that entry's VendorTable data structure.
 
