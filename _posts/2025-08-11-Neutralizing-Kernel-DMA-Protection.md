@@ -18,7 +18,7 @@ During a physical pentest against a simulated stolen laptop, one of the main obj
 
 The [FirstStrike](https://github.com/PN-Tester/FirstStrike) approach is to leave "DMA Protection" and "Intel VT-d" features enabled in BIOS, opting only to disabled "Intel VT-x" or "Virtualization Technology" when this settings can be controlled without triggering BitLocker Recovery.
 
-The attack then injects a modified [PCILeech](https://github.com/ufrisk/pcileech) kernel module during pre-boot which detonates automatically from within ntoskernel.exe once the OS is loaded. This technique works despite OS level Kernel DMA protection being enabled, but there are several limitations.
+The attack then injects a modified [PCILeech](https://github.com/ufrisk/pcileech) kernel module during pre-boot which detonates automatically from within ntoskrnl.exe once the OS is loaded. This technique works despite OS level Kernel DMA protection being enabled, but there are several limitations.
 
 ### Caveats
 In some recent UEFI implementation, Intel VT-x cannot be disabled while VT-d is enabled (the option is greyed out). Additionally, sometimes VT-x cannot be disabled without turning off Virtualization based BIOS Security, which itself can trigger BitLocker recovery. Finally, during a real physical pentest, you may encounter a target protected by a BIOS password on hardware for which no known BIOS password bypass technique exists.
