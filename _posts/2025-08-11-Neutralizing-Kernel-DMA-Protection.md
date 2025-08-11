@@ -48,7 +48,7 @@ Looks good
 
 Alright so Kernel DMA Protection is enabled at the OS Level. Perfect ! Let's get to work.
 
-## Theory
+### Theory
 Kernel DMA Protection has several *requirements* in order to function properly. We can perhaps attack some of these requirements in order to disable it.
 
 From [Microsoft Documentation on Kernel DMA Protection](https://learn.microsoft.com/en-us/windows/security/hardware-security/kernel-dma-protection-for-thunderbolt) :
@@ -83,9 +83,9 @@ On Windows, there is no easy way to read the address of DMAR ACPI from the OS. T
 
 In UEFI, virtual and physical memory are mapped 1:1, so the best approach to identifying the location of the DMAR ACPI table is to do so from pre-boot environment. While we cannot do this during a pentest, we CAN do it for our R&D in order to create the attack primitive, and work backwards with that information to find a valid search technique. Lets get started.
 
-#### Installing UEFIShell
+### Installing UEFIShell
 
-We can place a custom EFI program called [UEFIShell](https://github.com/pbatard/UEFI-Shell) into the boot partition of the windows system as shown below :
+We can place a custom EFI program called [UEFIShell](https://github.com/pbatard/UEFI-Shell) into the boot partition of the windows system as shown below
 
 ![Deploying UEFIShell](/assets/img/DMAReaper/7.PNG)
 
@@ -115,7 +115,7 @@ Sweet, now we know what we are looking for, the DMAR ACPI is located at **0x57B6
 
 As stated, we can't use acpiview from a DMA perspective, and booting UEFIShell only works in our lab environment because we **intentionally disabled Secure Boot and have access to the Boot Menu in the first place**. This **won't work during a pentest**. We need a way to derive the physical address of the DMAR ACPI table programmatically using only our pre-boot DMA capabilities.
 
-#### Leechcore 
+### Leechcore 
 
 The [PCILeech Framework](https://github.com/ufrisk/pcileech) includes a [python API](https://github.com/ufrisk/LeechCore/wiki/LeechCore_API_Python) which acts as a wrapper around important basic functionality used to control the PCILeech firmware. This awesome tool is called [LeechCore](https://github.com/ufrisk/LeechCore). We will leverage this to gain arbitrary READ/WRITE from our own python program so that we can implement custom logic without the overhead of modifying the C language components of the PCILeech client or modules. 
 
@@ -123,7 +123,7 @@ The [PCILeech Framework](https://github.com/ufrisk/pcileech) includes a [python 
 
 We implement this library into a basic python program which will initialize the connection to our screamer board, and use the read(), read_scatter(), and write() functions to control the FPGA during pre-boot and obtain and modify important memory structures.
 
-#### Starting from the EFI System Table
+### Starting from the EFI System Table
 
 The [EFI System table](https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html) is the primary target for UEFI exploitation because it contains pointers to all the important functions and structures that an EFI program may require to run during pre-boot. This includes pointers to functions like BootServices and RuntimeServices, but also pointers to data structure as we will see.
 
@@ -135,7 +135,7 @@ The search for the table and resultant structure is seen here :
 
 Now that we can reliably find the EFI System Table, we can get to its content!
 
-#### Configuration Table
+### Configuration Table
 
 The UEFI 2.1 Standard describes the [Configuration Table](https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html#efi-configuration-table-properties-table) below :
 
@@ -182,7 +182,7 @@ We locate the accompanying pointer in the Configuration table dump as shown belo
 
 ![Vendor Table Pointer](/assets/img/DMAReaper/19.PNG)
 
-#### ACPI 2.0 VendorTable
+### ACPI 2.0 VendorTable
 
 Now that we have the pointer to the ACPI VendorTable (**0x57BFE014**) we can read from that address. The objective is to find the **Root System Description Pointer** (RSDP) value, which points to the location of the **Root System Description Table** (RDST). Read more about this from the UEFI docs [here](https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#overview-of-the-system-description-table-architecture).
 
@@ -190,7 +190,7 @@ We find the pointer precisely at the previously obtained address, reading 4 byte
 
 ![RDSP](/assets/img/DMAReaper/20.PNG)
 
-#### Root System Description Table
+### Root System Description Table
 
 With the RSDP known, we can find the RSDT. This table contains pointers to all the ACPI tables currently installed in the firmware! We will parse them one by one and read the data at the locations they point to, searching for an entry starting with the DMAR signature in hex. `444D4152`
 
@@ -204,7 +204,7 @@ We can confirm by parsing the memory at **0x57B64000** manually. We see the cont
 
 This is the physical address of our target !
 
-#### DMAReaper.py
+### DMAReaper.py
 
 Now that we have the algorithm for finding the DMAR ACPI address, we can implement it in python leveraging the LeechCore library to control the FPGA.
 
@@ -227,17 +227,17 @@ Execution against Windows 11 24H2 is shown below. The program takes the followin
 
 What happens if we boot now? 
 
-#### Kernel DMA Protection Disabled
+### Kernel DMA Protection Disabled
 
 Windows 10 and Windows 11 will boot without complaining, but the DMAR ACPI table cannot be located since it was destroyed. This means that no IOMMU can be used, which means Kernel DMA Protection cannot be initialized!
 
 We can verify this again by checking "Device Security" 
 
-##### Windows 10 - Device Security
+### Windows 10 - Device Security
 
 ![Win 10 Device Security](/assets/img/DMAReaper/23.PNG)
 
-##### Windows 11 - Device Security
+### Windows 11 - Device Security
 
 ![Win 11 Device Security](/assets/img/DMAReaper/24.PNG)
 
@@ -245,11 +245,11 @@ We can verify this again by checking "Device Security"
 
 Lets check MSINFO32 as before :
 
-##### Windows 10 - MSINFO32
+### Windows 10 - MSINFO32
 
 ![Win 10 - MSINFO](/assets/img/DMAReaper/25.PNG)
 
-##### Windows 11 - MSINFO32
+### Windows 11 - MSINFO32
 
 ![Win 11 - MSINFO](/assets/img/DMAReaper/26.PNG)
 
