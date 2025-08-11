@@ -16,31 +16,31 @@ _This post is about pre-boot DMA attacks against modern windows targets during p
 
 During a physical pentest against a simulated stolen laptop, one of the main objectives is finding a way to modify UEFI configuration such that we can enable a Direct Memory Access (DMA) attack. In modern times, attackers will commonly face hardened laptops which have a multitude of firmware countermeasures enabled by default. Additionally, most modern laptops implement hardware encryption in the form of BitLocker, and use a TPM to track changes to the pre-boot configuration. This makes modification of certain UEFI settings without triggering BitLocker recovery a non-trivial challenge. There are some existing solutions to these issues. 
 
-The [FirstStrike](https://github.com/PN-Tester/FirstStrike) approach is to leave "DMA Protection" and "Intel VT-d" features enabled in BIOS, opting only to disabled "Intel VT-x" or "Virtualization Technology" when this settings can be controlled without triggering BitLocker Recovery.
+The [FirstStrike](https://github.com/PN-Tester/FirstStrike) approach is to leave "DMA Protection" and "Intel VT-d" features enabled in BIOS, opting only to disable "Intel VT-x" or "Virtualization Technology" when this settings can be controlled without triggering BitLocker Recovery.
 
 The attack then injects a modified [PCILeech](https://github.com/ufrisk/pcileech) kernel module during pre-boot which detonates automatically from within ntoskrnl.exe once the OS is loaded. This technique works despite OS level Kernel DMA protection being enabled, but there are several limitations.
 
 ### Caveats
 In some recent UEFI implementation, Intel VT-x cannot be disabled while VT-d is enabled (the option is greyed out). Additionally, sometimes VT-x cannot be disabled without turning off Virtualization based BIOS Security, which itself can trigger BitLocker recovery. Finally, during a real physical pentest, you may encounter a target protected by a BIOS password on hardware for which no known BIOS password bypass technique exists.
 
-Furthermore, the FirstStrike shellcode only works at against targets running windows 10. There is no public solution against Windows 11, and windows 10 is soon to be retired.
+Furthermore, the FirstStrike shellcode only works against targets running windows 10. There is no public solution against Windows 11, and windows 10 is soon to be retired.
 
 We need an alternative method to disable Kernel DMA protection for these circumstances!
 
 ### Initial Setup
-Before we continue, lets check our windows target and make sure that Kernel DMA Protection is indeed enabled.
+Before we continue, let's check our windows target and make sure that Kernel DMA Protection is indeed enabled.
 
 The [documentation from microsoft](https://learn.microsoft.com/en-us/windows/security/hardware-security/kernel-dma-protection-for-thunderbolt#check-if-kernel-dma-protection-is-enabled) states that we can check this in two places , MSINFO and "Device Security".
 
 ![https://learn.microsoft.com/en-us/windows/security/hardware-security/kernel-dma-protection-for-thunderbolt](/assets/img/DMAReaper/1.PNG)
 
-Ok, lets confirm those elements on our target laptop. Note we use Windows 10 here for convenience but everything is replicated on windows 11 later in the post :
+Ok, let's confirm those elements on our target laptop. Note we use Windows 10 here for convenience but everything is replicated on windows 11 later in the post :
 
 ### Device Security
 
 ![Verifying Device Security](/assets/img/DMAReaper/2.PNG)
 
-Looks good
+Looks good. Memory Access Protection is on.
 
 ### MSINFO32
 
@@ -63,25 +63,25 @@ This is evident from Microsoft documented instruction for enabling Kernel DMA Pr
 
 ![Kernel DMA Protection requirements](/assets/img/DMAReaper/5.PNG)
 
-Alright, we already have a method of attacking the OS when we can disable VT-x ([FirstStrike](https://github.com/PN-Tester/FirstStrike)), so lets focus on VT-d. As stated in the caveats section, some UEFI implementation limit our ability to turn of VT-x without first disabling VT-d, and turning off VT-d triggers BitLocker recovery. That wont work. We need to *leave the features on* and still manage to disable DMA protection. T
+Alright, we already have a method of attacking the OS when we can disable VT-x ([FirstStrike](https://github.com/PN-Tester/FirstStrike)), so let's focus on VT-d. As stated in the caveats section, some UEFI implementatiosn limit our ability to turn off VT-x without first disabling VT-d, and turning off VT-d triggers BitLocker recovery. That won't work. We need to *leave the features on* and still manage to disable DMA protection. 
 
-Let's explore how VT-d works from the [Intel Virtualization Technology for Directed I/O documentation](https://www.intel.com/content/www/us/en/content-details/774206/intel-virtualization-technology-for-directed-i-o-architecture-specification.html) :
+Let's explore how VT-d works by reading the [Intel Virtualization Technology for Directed I/O documentation](https://www.intel.com/content/www/us/en/content-details/774206/intel-virtualization-technology-for-directed-i-o-architecture-specification.html) :
 
 ![Intel VT-d Documentation](/assets/img/DMAReaper/6.PNG)
 
-So, the **IOMMU** is useabled seemingly because VT-d reports the remapping data to the OS through this DMA Remapping Reporting (DMAR) ACPI table structure.
+So, the **IOMMU** seemingly depends on VT-d reporting the remapping data to the OS through this DMA Remapping Reporting (DMAR) ACPI table structure.
 
-What is ACPI ? [Advanced Configuration and Power Interface](https://en.wikipedia.org/wiki/ACPI). Essentially tables used by Firmware to report capabilities and communicate functional data to the OS (think fans, backlights, hardware components, etc.)
+What is ACPI ? [Advanced Configuration and Power Interface](https://en.wikipedia.org/wiki/ACPI). Essentially tables used by firmware to report capabilities and communicate functional data to the OS (think fans, backlights, hardware components, etc.)
 
 These tables are just "Structures" in memory. Nothing too fancy here.
 
-[The creator of PCILeech, Ulf Frisk, posted about this way back in 2016](https://blog.frizk.net/2016/11/disable-virtualization-based-security.html). He documents that nulling the DMAR ACPI can disabled [Virtualization Based Security](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-vbs).
+[Ulf Frisk posted about this way back in 2016](https://blog.frizk.net/2016/11/disable-virtualization-based-security.html). He documents that nulling the DMAR ACPI can disable [Virtualization Based Security](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-vbs).
 
-While this is no longer the case in 2025, it may still impact Kernel DMA Protection, which is separate from VBS. We will set the DMAR ACPI table as our target for research! Ulf's blog post assumes that attackers already know the address of the DMAR ACPI (by booting into Linux from a USB and using dmesg to grab logs from the kernel at boot). This is an unreasonable requirement for our pentest scenario, since most target computers will not allow us to control boot order or boot from USB. We will need to find the address ourselves. We can use a raw search, but this brings up several issues, not the least of which is reliability and time. I want something algorithmic!
+While this is no longer the case in 2025, the technique may still impact Kernel DMA Protection, which is separate from VBS. We will set the DMAR ACPI table as our target for research! Ulf's blog post assumes that attackers already know the address of the DMAR ACPI (by booting into Linux from a USB and using dmesg to grab logs from the kernel at boot). This is an unreasonable requirement for our pentest scenario, since most target computers will not allow us to control boot order or boot from USB. We will need to find the address ourselves. We can use a raw search, but this brings up several issues, not the least of which is reliability and time. I want something algorithmic!
 
 On Windows, there is no easy way to read the address of DMAR ACPI from the OS. There are tools we can use to *parse* ACPI tables, but we **cannot dereference the virtual address** exposed to the operating system. And if we want to interact with this structure, we will need the physical address.
 
-In UEFI, virtual and physical memory are mapped 1:1, so the best approach to identifying the location of the DMAR ACPI table is to do so from pre-boot environment. While we cannot do this during a pentest, we CAN do it for our R&D in order to create the attack primitive, and work backwards with that information to find a valid search technique. Lets get started.
+In UEFI, virtual and physical memory are mapped 1:1, so the best approach to identifying the location of the DMAR ACPI table is to do so from pre-boot environment. While we cannot do this during a pentest, we CAN do it for our R&D in order to create the attack primitive, and work backwards with that information to find a valid search technique. let's get started.
 
 ### Installing UEFIShell
 
@@ -125,7 +125,7 @@ We implement this library into a basic python program which will initialize the 
 
 ### Starting from the EFI System Table
 
-The [EFI System table](https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html) is the primary target for UEFI exploitation because it contains pointers to all the important functions and structures that an EFI program may require to run during pre-boot. This includes pointers to functions like BootServices and RuntimeServices, but also pointers to data structure as we will see.
+The [EFI System table](https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html) is a primary target for UEFI exploitation because it contains pointers to all the important functions and structures that an EFI program may require to run during pre-boot. This includes pointers to functions like BootServices and RuntimeServices, but also pointers to data structure as we will see.
 
 Crucially, we can locate the EFI System Table by reading memory during pre-boot and flagging the IBI SYST hex pattern `4942492953545359`. We will implement some basic logic in python to scan memory for this, and to eliminate false positives by checking for stuff like revision number and size to ensure validity.
 
@@ -243,7 +243,7 @@ We can verify this again by checking "Device Security"
 
 **Memory Access Protection** is now *missing* from the Core Isolation features!!
 
-Lets check MSINFO32 as before :
+let's check MSINFO32 as before :
 
 ### Windows 10 - MSINFO32
 
