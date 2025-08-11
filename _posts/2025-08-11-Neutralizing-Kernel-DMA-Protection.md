@@ -7,6 +7,9 @@ category:
 - DMA
 tags: [DMA, Pentest, Physical, Hardware]
 mermaid: true
+image:
+  path : "assets/img/DMAReaper/DMAReaper.jpg)"
+  src : "/assets/img/DMAReaper/DMAReaper.jpg)"
 ---
 
 The FirstStrike approach is to leave "DMA Protection" and "Intel VT-D" enabled in BIOS, opting only to disabled "Intel VT-X" or "Virtualization Technology" when these settings can be controlled.
