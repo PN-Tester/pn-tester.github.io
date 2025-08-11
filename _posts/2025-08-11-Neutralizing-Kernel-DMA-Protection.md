@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Neutralizing Kernel DMA Protection
-date: '2025-08-11 10:00:00 -0600'
+date: '2025-08-10 10:00:00 -0600'
 description: 'Research on pre-boot DMA attack methodology for disabling Kernel DMA protection on modern windows'
 category:
 - DMA
