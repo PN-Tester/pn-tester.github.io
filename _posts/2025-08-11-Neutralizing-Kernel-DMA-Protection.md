@@ -83,7 +83,7 @@ In UEFI, virtual and physical memory are mapped 1:1, so the best approach to ide
 
 #### Installing UEFIShell
 
-We can place a custom EFI program called (UEFIShell)[https://github.com/pbatard/UEFI-Shell] into the boot partition of the windows system as shown below :
+We can place a custom EFI program called [UEFIShell](https://github.com/pbatard/UEFI-Shell) into the boot partition of the windows system as shown below :
 
 ![Deploying UEFIShell](https://github.com/PN-Tester/pn-tester.github.io/blob/ffe7e1fddd49b8b1573bf3b2e1029cacb59dbbff/assets/img/DMAReaper/7.PNG)
 
