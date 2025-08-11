@@ -158,9 +158,9 @@ We can walk this table in python easily. The raw memory looks like this :
 
 ![Configuration table data](/assets/img/DMAReaper/17.PNG)
 
-Again, according to the UEFI 2.1 Specs, this section contains GUID/Pointer pairs. The GUIDs are 16 Bytes long and the Pointers are 8 Bytes long making each entry 24 Bytes total. We can walk these programmatically in 24 byte chunks to parse them.
+Again, according to the UEFI 2.1 Specs, this section contains GUID/Pointer pairs. The GUIDs are 16 ytes long and the Pointers are 8 bytes long making each entry 24 bytes total. We can walk these programmatically in 24 byte chunks to parse them.
 
-Once we find the right GUID, we will use its accompanying pointer to get to that entries VendorTable data structure.
+Once we find the right GUID, we will use its accompanying pointer to get to that entry's VendorTable data structure.
 
 From the documentation, ["Industry Standard GUIDs"](https://uefi.org/specs/UEFI/2.10/04_EFI_System_Table.html#industry-standard-configuration-tables) are described
 
@@ -169,10 +169,10 @@ From the documentation, ["Industry Standard GUIDs"](https://uefi.org/specs/UEFI/
 We want to find ACPI tables, so we are interested in the **EFI_ACPI_20_TABLE_GUID** value!
 
 The doc shows the value as 
-  `{0x8868e871,0xe4f1,0x11d3,\`
+  `{0x8868e871,0xe4f1,0x11d3,`\
     `{0xbc,0x22,0x00,0x80,0xc7,0x3c,0x88,0x81}}`
 
-In reality, the structure uses a mix of Little and Big Endian for its different parts. If we want to pattern match, we need to normalize the different endianness of this string.
+Confusingly, the structure uses a mix of Little and Big Endian for its different parts. If we want to pattern match, we need to normalize the different endianness of this string.
 
 The three parts before the slash are little endian and everything after the slash is big endian, leading to:
 
@@ -223,7 +223,7 @@ Execution against Windows 11 24H2 is shown below. The program takes the followin
 9) Identify the DMAR ACPI Table
 10) Overwrite the DMAR ACPI Table with 64 zeroes
 
-![DMAReaper.py](https://github.com/PN-Tester/pn-tester.github.io/blob/0210e519c53fb470b7236594128e7da4a5c5ce83//assets/img/DMAReaper/demo.jpg)
+![DMAReaper.py](/assets/img/DMAReaper/demo.jpg)
 
 What happens if we boot now? 
 
