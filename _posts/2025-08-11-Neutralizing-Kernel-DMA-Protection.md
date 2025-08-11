@@ -12,6 +12,8 @@ image:
   src : "/assets/img/DMAReaper/DMAReaper.jpg)"
 ---
 
+This post is about pre-boot DMA attacks against modern windows targets during physical pentest scenarios.
+
 The FirstStrike approach is to leave "DMA Protection" and "Intel VT-D" enabled in BIOS, opting only to disabled "Intel VT-X" or "Virtualization Technology" when these settings can be controlled.
 
 The attack then injects a modified pcileech kernel module during preboot while detonates automatically from within ntoskernel.exe once the OS is loaded. This approach works despite OS level Kernel DMA protection being enabled. 
