@@ -213,7 +213,7 @@ Now that we have the algorithm for finding the DMAR ACPI address, we can impleme
 Execution against Windows 11 24H2 is shown below. The program takes the following logical steps:
 1. Scan memory using scatter search in 100 x 4096 byte chunks (size of a page)
 2. Find the EFI System Table Base address 
-3. Find the Configuration table using offset 0x70 from the EFI System Table Basse address 
+3. Find the Configuration Table using the EFI System Table Base address 
 4. Parse each entry to find the ACPI 2.0 GUID 
 5. Find the paired ACPI 2.0 VendorTable pointer 
 6. Find the Root System Description Pointer in the ACPI 2.0 VendorTable 
