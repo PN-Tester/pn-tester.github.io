@@ -12,9 +12,9 @@ image:
   src : "/assets/img/DMAReaper/LOGO.png"
 ---
 
-_This post is about pre-boot DMA attacks against modern windows targets during physical pentest scenarios using the [PCILeech firmware](https://github.com/ufrisk/pcileech-fpga/) and a suitable FPGA board._
+_This post is about pre-boot DMA attacks against modern windows targets during physical pentest scenarios using the [PCILeech firmware](https://github.com/ufrisk/pcileech-fpga/) and a suitable FPGA board. You can find the DMAReaper.py tool described in this post [here](https://github.com/PN-Tester/DMAReaper)._
 
-During a physical pentest against a simulated stolen laptop, one of the main objectives is finding a way to modify UEFI configuration such that we can enable a Direct Memmory Access (DMA) attack. In modern times, attackers will commonly face hardened laptops which have a multitude of firmware countermeasures enabled by default. Additionally, most modern laptops implement hardware encryption in the form of BitLocker, and use a TPM to track changes to the pre-boot configuration. This makes modification of certain UEFI settings without triggering BitLocker recovery a non-trivial challenge. There are some existing solutions to these issues. 
+During a physical pentest against a simulated stolen laptop, one of the main objectives is finding a way to modify UEFI configuration such that we can enable a Direct Memory Access (DMA) attack. In modern times, attackers will commonly face hardened laptops which have a multitude of firmware countermeasures enabled by default. Additionally, most modern laptops implement hardware encryption in the form of BitLocker, and use a TPM to track changes to the pre-boot configuration. This makes modification of certain UEFI settings without triggering BitLocker recovery a non-trivial challenge. There are some existing solutions to these issues. 
 
 The [FirstStrike](https://github.com/PN-Tester/FirstStrike) approach is to leave "DMA Protection" and "Intel VT-d" features enabled in BIOS, opting only to disabled "Intel VT-x" or "Virtualization Technology" when this settings can be controlled without triggering BitLocker Recovery.
 
