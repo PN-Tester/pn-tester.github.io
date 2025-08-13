@@ -16,7 +16,7 @@ _This post is about pre-boot DMA attacks against modern windows targets during p
 
 During a physical pentest against a simulated stolen laptop, one of the main objectives is finding a way to modify UEFI configuration such that we can enable a Direct Memory Access (DMA) attack. In modern times, attackers will commonly face hardened laptops which have a multitude of firmware countermeasures enabled by default. Additionally, most modern laptops implement hardware encryption in the form of BitLocker, and use a TPM to track changes to the pre-boot configuration. This makes modification of certain UEFI settings without triggering BitLocker recovery a non-trivial challenge. There are some existing solutions to these issues. 
 
-The [FirstStrike](https://github.com/PN-Tester/FirstStrike) approach is to leave "DMA Protection" and "Intel VT-d" features enabled in BIOS, opting only to disable "Intel VT-x" or "Virtualization Technology" when this settings can be controlled without triggering BitLocker Recovery.
+My [FirstStrike](https://github.com/PN-Tester/FirstStrike) approach is to leave "DMA Protection" and "Intel VT-d" features enabled in BIOS, opting only to disable "Intel VT-x" or "Virtualization Technology" when this settings can be controlled without triggering BitLocker Recovery.
 
 The attack then injects a modified [PCILeech](https://github.com/ufrisk/pcileech) kernel module during pre-boot which detonates automatically from within ntoskrnl.exe once the OS is loaded. This technique works despite OS level Kernel DMA protection being enabled, but there are several limitations.
 
